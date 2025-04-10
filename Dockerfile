@@ -1,8 +1,5 @@
 FROM n8nio/n8n:latest
 
-USER root
+RUN apk --no-cache add curl
 
-RUN apk update && \
-    apk add --no-cache curl ffmpeg
-
-USER node
+CMD ["n8n"]
