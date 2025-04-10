@@ -1,6 +1,11 @@
 FROM n8nio/n8n:latest
 
-RUN apk update && \
-    apk add --no-cache curl
+USER root
+
+RUN apt-get update && \
+    apt-get install -y curl && \
+    apt-get clean
+
+USER node
 
 CMD ["n8n"]
