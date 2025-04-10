@@ -1,29 +1,28 @@
 FROM node:18-alpine
 
-# Install dependencies (ffmpeg includes ffprobe too!)
+# Install OS dependencies
 RUN apk update && apk add --no-cache \
     curl \
     python3 \
     make \
     g++ \
     git \
-    ffmpeg # ✅ this includes ffprobe too!
+    ffmpeg # includes ffprobe
 
-# Set working dir
+# Set working directory
 WORKDIR /app
 
-# Install n8n
-RUN npm install n8n@1.44.0 -g
+# Install specific version of n8n
+RUN npm install -g n8n@1.44.0
 
-# Create n8n config dir
-RUN mkdir -p /home/node/.n8n
+# Create and set proper permissions for n8n config dir
+RUN mkdir -p /home/node/.n8n && chown -R node:node /home/node
 
-# Set permissions
-RUN chown -R node:node /home/node
-
-# Run as non-root
+# Run as non-root for security
 USER node
 
+# Expose port
 EXPOSE 5678
 
-CMD ["n8n"]
+# Run DB migrations before launching
+CMD ["sh", "-c", "n8n migrate:up && n8n"]
