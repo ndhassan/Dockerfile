@@ -1,10 +1,9 @@
-FROM n8nio/n8n
+FROM n8nio/n8n:latest
 
-# Switch to root to install packages
 USER root
 
-# Install curl and ffmpeg (or any other tool you need)
-RUN apk update && apk add --no-cache curl ffmpeg
+RUN apt-get update && \
+    apt-get install -y curl ffmpeg && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Switch back to the node user for security
 USER node
