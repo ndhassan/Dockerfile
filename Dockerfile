@@ -1,10 +1,8 @@
-FROM n8nio/n8n:latest
+FROM n8nio/n8n:alpine
 
 USER root
 
-RUN apt-get update && \
-    apt-get install -y curl && \
-    apt-get clean
+RUN apk update && apk add --no-cache curl
 
 USER node
 
