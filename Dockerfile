@@ -12,3 +12,6 @@ RUN apk update && apk add --no-cache \
 
 # Optional: switch back to node user
 USER node
+
+# Run migrations and start n8n
+CMD ["sh", "-c", "n8n migrate:up && n8n"]
