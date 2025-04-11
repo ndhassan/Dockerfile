@@ -1,28 +1,15 @@
-FROM node:18-alpine
+# Use the official n8n image as base
+FROM n8nio/n8n:latest
 
-# Install OS dependencies
-RUN apk update && apk add --no-cache \
+# Switch to root to install packages
+USER root
+
+# Install curl, ffmpeg, and nano
+RUN apt-get update && apt-get install -y \
     curl \
-    python3 \
-    make \
-    g++ \
-    git \
-    ffmpeg # includes ffprobe
+    ffmpeg \
+    nano \
+ && apt-get clean
 
-# Set working directory
-WORKDIR /app
-
-# Install specific version of n8n
-RUN npm install -g n8n@1.44.0
-
-# Create and set proper permissions for n8n config dir
-RUN mkdir -p /home/node/.n8n && chown -R node:node /home/node
-
-# Run as non-root for security
+# (Optional) Switch back to the default n8n user
 USER node
-
-# Expose port
-EXPOSE 5678
-
-# Run DB migrations before launching
-CMD ["sh", "-c", "n8n migrate:up && n8n"]
