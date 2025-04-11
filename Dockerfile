@@ -1,15 +1,14 @@
-# Use the official n8n image as base
-FROM n8nio/n8n:latest
+FROM n8nio/n8n:1.44.0
 
-# Switch to root to install packages
+# Use root to install packages
 USER root
 
-# Install curl, ffmpeg, and nano
-RUN apt-get update && apt-get install -y \
+# Install additional tools using apk
+RUN apk update && apk add --no-cache \
     curl \
     ffmpeg \
     nano \
- && apt-get clean
+    jq
 
-# (Optional) Switch back to the default n8n user
+# Optional: switch back to node user
 USER node
