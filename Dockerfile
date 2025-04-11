@@ -7,8 +7,9 @@ RUN apk update && apk add --no-cache \
     nano \
     jq
 
-USER node
+# Copy and use the custom entrypoint
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-# Preserve original startup behavior (migrations + app start)
-ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["n8n"]
+USER node
+ENTRYPOINT ["/entrypoint.sh"]
